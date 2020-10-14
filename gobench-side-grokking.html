@@ -106,7 +106,7 @@ Still an opened issue https://github.com/golang/go/issues/27751
 
 ---
 
-## Lesson 2: User program must run at different kernel process
+## Lesson 2: User program must be run at different kernel process
 
 --
 Can we reliability kill a child process (goroutine)?
@@ -129,7 +129,41 @@ Can we recover from a panic?
 --
 No. And should not.
 
-# Introduction
+---
+
+First attempt: Go plugin
+
+Now: user scenario + go template --> executor binary
+
+Agent -- rpc over unix socket -- Executor
+
+[picture]
+
+---
+
+## Lesson 3: Do not use net/rpc
+
+- this package is frozen
+- cannot get remote address
+
+---
+
+## Gobench is having
+
+- Single model
+- Support HTTP, MQTT, NATS
+
+--
+
+## WIP
+- Distributed model
+- More client types (RPC, WS)
+- Docs
+
+--
+
+## May never
+- Different DB driver layer to save raw metrics
 
     </textarea>
     <script src="https://remarkjs.com/downloads/remark-latest.min.js">
