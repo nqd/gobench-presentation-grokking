@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Title</title>
+    <meta charset="utf-8">
+    <style>
+        @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+        @import url(https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
+        @import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
+
+        body {
+            font-family: 'Droid Serif';
+        }
+
+        h1,
+        h2,
+        h3 {
+            font-family: 'Yanone Kaffeesatz';
+            font-weight: normal;
+        }
+
+        .remark-code,
+        .remark-inline-code {
+            font-family: 'Ubuntu Mono';
+        }
+    </style>
+</head>
+
+<body>
+    <textarea id="source">
+
+class: center, middle
+
+# Title
+
+---
+
+## Features
+
+1. Expressive: Complex scenario, not just a simple HTTP endpoint
+2. Protocol diversification: MQTT, NATS, and more
+3. Intuitive: Realtime graph
+4. Scalable: One million concurrent connection (tba)
+
+---
+
+## Expressive
+
+- No DSL
+
+- Use Go to write scenario
+
+---
+class: middle
+
+```go
+package main
+
+import "github.com/gobench-io/gobench/scenario"
+
+func export() scenario.Vus { // required
+    return scenario.Vus{
+        scenario.Vu{     // a virtual user class
+            Nu:   1000,  // number of virtual users
+            Rate: 200,   // startup rate (Poisson dist)
+            Fu:   f1,    // user ref function
+        },
+    }
+}
+
+func f1(ctx context.Context, vui int) {
+    for {
+        log.Println("tic")
+        time.Sleep(1 * time.Second)
+    }
+}
+```
+
+---
+
+## How does Gobench work, then?
+
+<!-- <img src="./gobench-model.png" alt="gobench model" style="width: 100%;"/> -->
+<img src="./gobench-model.svg" alt="gobench model" style="width: 100%;"/>
+
+--
+
+create a scenario
+
+--
+
+compile
+
+--
+distribute workload (provisioning)
+
+--
+run by a agent, agent aggregate metrics
+
+---
+
+# Introduction
+
+    </textarea>
+    <script src="https://remarkjs.com/downloads/remark-latest.min.js">
+    </script>
+    <script>
+        var slideshow = remark.create({
+            highlightLanguage: 'go',
+            highlightStyle: 'tomorrow-night-eighties',
+            highlightLines: true
+        });
+    </script>
+</body>
+
+</html>
