@@ -84,21 +84,50 @@ func f1(ctx context.Context, vui int) {
 <!-- <img src="./gobench-model.png" alt="gobench model" style="width: 100%;"/> -->
 <img src="./gobench-model.svg" alt="gobench model" style="width: 100%;"/>
 
---
+---
 
-create a scenario
-
---
-
-compile
+## Lesson 1: Go plugin is a joke
 
 --
-distribute workload (provisioning)
+First attempt for scenario is Go plugin
+
+```shell
+go build -buildmode=plugin -o scenario.so scenario.go
+```
 
 --
-run by a agent, agent aggregate metrics
+Error when build with different version or build from different path
+
+```shell
+panic: plugin.Open("plugin"): plugin was built with a different version of package
+```
+
+Still an opened issue https://github.com/golang/go/issues/27751
 
 ---
+
+## Lesson 2: User program must run at different kernel process
+
+--
+Can we reliability kill a child process (goroutine)?
+
+--
+No. Phantom routines.
+
+```go
+func f1(ctx context.Context, vui int) {
+    for {
+        log.Println("tic")
+        time.Sleep(1 * time.Second)
+    }
+}
+```
+
+--
+Can we recover from a panic?
+
+--
+No. And should not.
 
 # Introduction
 
