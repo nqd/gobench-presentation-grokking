@@ -86,7 +86,7 @@ func f1(ctx context.Context, vui int) {
 
 ---
 
-## Lesson 1: Go plugin is a joke
+## Lesson 1: Go plugin is so fragile
 
 --
 First attempt for scenario is Go plugin
@@ -109,33 +109,83 @@ Still an opened issue https://github.com/golang/go/issues/27751
 ## Lesson 2: User program must be run at different kernel process
 
 --
-Can we reliability kill a child process (goroutine)?
+
+Can we reliability force to kill a child goroutine?
 
 --
+
 No. Phantom routines.
 
 ```go
 func f1(ctx context.Context, vui int) {
+    go foo()
+
     for {
-        log.Println("tic")
-        time.Sleep(1 * time.Second)
+        select {
+        case <-ctx.Done():
+            return
+        }
     }
 }
 ```
 
---
+---
+
+## Lesson 2: User program must be run at different kernel process
+
 Can we recover from a panic?
 
 --
-No. And should not.
+
+Not always.
+
+```go
+func f1(ctx context.Context, vui int) {
+    defer func() {
+        if r := recover(); r != nil {
+            // ...
+        }
+    }()
+
+    go func() {
+        panic("Panicking")
+    }
+
+    for {
+        select {
+        case <-ctx.Done():
+            return
+        }
+    }
+}
+```
 
 ---
 
-First attempt: Go plugin
+## Move from Go plugin
 
-Now: user scenario + go template --> executor binary
+User scenario + go template => Executor binary
 
-Agent -- rpc over unix socket -- Executor
+```go
+out, err := exec.
+        Command(
+            "sh", "-c",
+            fmt.Sprintf("cd %s; go build -o %s", dir, binaryPath),
+        ).
+        CombinedOutput()
+```
+
+---
+
+## Agent and Executor
+
+Communicate via grpc over unix socket
+
+```go
+cmd := exec.CommandContext(ctx, executorPath,
+        "--agent-sock", agentSock,
+        "--executor-sock", executorSock)
+```
 
 [picture]
 
