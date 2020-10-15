@@ -81,7 +81,6 @@ func f1(ctx context.Context, vui int) {
 
 ## How does Gobench work, then?
 
-<!-- <img src="./gobench-model.png" alt="gobench model" style="width: 100%;"/> -->
 <img src="./gobench-model.svg" alt="gobench model" style="width: 100%;"/>
 
 ---
@@ -175,6 +174,7 @@ out, err := exec.
         CombinedOutput()
 ```
 
+
 ---
 
 ## Agent and Executor
@@ -187,14 +187,26 @@ cmd := exec.CommandContext(ctx, executorPath,
         "--executor-sock", executorSock)
 ```
 
-[picture]
+
+--
+
+
+<img src="./gobench-agent-executor.svg" alt="gobench model" class="center"
+style="width: 60%;">
 
 ---
 
 ## Lesson 3: Do not use net/rpc
 
+net/rpc is Go rpc build in
+- fast https://github.com/cockroachdb/rpc-bench
+- no 3rd party lib
+
+--
+
+But:
 - this package is frozen
-- cannot get remote address
+- cannot get remote address https://github.com/golang/go/issues/4584
 
 ---
 
