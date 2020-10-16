@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Title</title>
+    <title>Gobench Benchmark Tool</title>
     <meta charset="utf-8">
     <style>
         @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
@@ -32,7 +32,10 @@
 
 class: center, middle
 
-# Title
+# Gobench Load Test Tool
+
+## Nguyễn Quốc Đính
+### Grokking Checkpoint, 17/10/2020
 
 ---
 
@@ -43,16 +46,11 @@ class: center, middle
 3. Intuitive: Realtime graph
 4. Scalable: One million concurrent connection (tba)
 
----
-
-## Expressive
-
-- No DSL
-
-- Use Go to write scenario
+https://github.com/gobench-io/gobench
 
 ---
-class: middle
+
+## Expressive: No DSL, only Go yo!
 
 ```go
 package main
@@ -199,12 +197,14 @@ style="width: 60%;">
 ## Lesson 3: Do not use net/rpc
 
 net/rpc is Go rpc build in
+
 - fast https://github.com/cockroachdb/rpc-bench
 - no 3rd party lib
 
 --
 
-But:
+But
+
 - this package is frozen
 - cannot get remote address https://github.com/golang/go/issues/4584
 
