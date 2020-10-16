@@ -24,6 +24,13 @@
         .remark-inline-code {
             font-family: 'Ubuntu Mono';
         }
+
+        .center {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            width: 80%;
+        }
     </style>
 </head>
 
@@ -159,10 +166,29 @@ $ curl -X POST -H 'Content-Type: application/json'
           "name":"cool bench",
           "scenario":"base64 encode scenario file",
           "gomod":"base64 encode go.mod file",
-          "mode": "local"
+*         "mode": "local"
         }'
 http://endpoint/api/applications
 ```
+
+<img src="./gobench-local-mode.svg" alt="gobench local model" class="center" style="width: 80%;"/>
+
+---
+## Distributed mode (Work In Process)
+
+```bash
+$ curl -X POST -H 'Content-Type: application/json'
+--data '{
+            "name":"cool bench",
+            "scenario":"base64 encode scenario file",
+            "gomod":"base64 encode go.mod file",
+*           "mode": "cloud",
+*           "node": 7
+        }'
+http://endpoint/api/applications
+```
+
+<img src="./gobench-cloud-mode.svg" alt="gobench cloud model" class="center";/>
 
 ---
 
