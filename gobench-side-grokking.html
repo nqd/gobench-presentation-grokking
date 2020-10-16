@@ -37,11 +37,12 @@
 <body>
     <textarea id="source">
 
-class: center, middle
+class: middle
 
 # Gobench Load Testing Tool
 
 ## Nguyễn Quốc Đính
+
 ### Grokking Checkpoint, 17/10/2020
 
 ---
@@ -49,9 +50,12 @@ class: center, middle
 ## Features
 
 1. Expressive: Complex scenario, not just a simple HTTP endpoint
+
 2. Protocol diversification: MQTT, NATS, and more
+
 3. Intuitive: Realtime graph
-4. Scalable: One million concurrent connection (tba)
+
+4. Scalable: One million concurrent connection (TBA)
 
 https://github.com/gobench-io/gobench
 
@@ -174,6 +178,7 @@ http://endpoint/api/applications
 <img src="./gobench-local-mode.svg" alt="gobench local model" class="center" style="width: 80%;"/>
 
 ---
+
 ## Distributed mode (Work In Process)
 
 ```shell
@@ -231,7 +236,8 @@ Gobench is using (1)
 
 ## WIP
 - Distributed model
-- More client types (RPC, WS)
+- More client types (RPC, WS, graphQL)
+- Benchmark the benchmark https://k6.io/blog/comparing-best-open-source-load-testing-tools#max-traffic-generation-capability
 - Docs
 
 --
@@ -371,6 +377,11 @@ But
 - this package is frozen
 - cannot get remote address https://github.com/golang/go/issues/4584
 
+---
+
+class: middle
+
+[github.com/gobench-io/gobench](https://github.com/gobench-io/gobench)
 
     </textarea>
     <script src="https://remarkjs.com/downloads/remark-latest.min.js">
