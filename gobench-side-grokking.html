@@ -176,7 +176,7 @@ http://endpoint/api/applications
 ---
 ## Distributed mode (Work In Process)
 
-```bash
+```shell
 $ curl -X POST -H 'Content-Type: application/json'
 --data '{
             "name":"cool bench",
@@ -189,6 +189,60 @@ http://endpoint/api/applications
 ```
 
 <img src="./gobench-cloud-mode.svg" alt="gobench cloud model" class="center";/>
+
+---
+
+## Create new client
+
+Example: https://github.com/gobench-io/gobench/tree/master/clients
+
+Call 2 APIs
+
+```go
+import (
+    "github.com/gobench-io/gobench/executor"
+)
+
+executor.Setup(groups)
+executor.Notify(metric-id, value)
+```
+
+---
+## Metric collection
+
+1. Aggregate metrics at Agent. Send the result over the Master
+2. Send the raw metrics to master or centralize DB
+
+
+(1) is simple; but lost the ability to merge histogram metrics.
+
+(2) is expensive.
+
+Gobench is using (1)
+
+---
+
+## Gobench is having
+
+- Single model
+- Support HTTP, MQTT, NATS
+
+--
+
+## WIP
+- Distributed model
+- More client types (RPC, WS)
+- Docs
+
+--
+
+## May never
+- Different DB driver layer to save raw metrics
+
+---
+class: middle
+
+# Gobench is my first serious Golang project. Some learned lessons
 
 ---
 
@@ -237,7 +291,7 @@ func f1(ctx context.Context, vui int) {
 
 ---
 
-## Lesson 2: User program must be run at different kernel process
+## Lesson 3: User program must be run at different kernel process
 
 Can we recover from a panic?
 
@@ -317,24 +371,6 @@ But
 - this package is frozen
 - cannot get remote address https://github.com/golang/go/issues/4584
 
----
-
-## Gobench is having
-
-- Single model
-- Support HTTP, MQTT, NATS
-
---
-
-## WIP
-- Distributed model
-- More client types (RPC, WS)
-- Docs
-
---
-
-## May never
-- Different DB driver layer to save raw metrics
 
     </textarea>
     <script src="https://remarkjs.com/downloads/remark-latest.min.js">
