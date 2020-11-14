@@ -8,7 +8,8 @@ Phát triển chức năng mới.
 Benchmark để nhìn thấy hiệu năng của hệ thống trước khi đưa ra thị trường.
 
 
-Mục tiêu
+Mục tiêu:
+
 (1) Expressive: Kịch bản benchmark phải đủ phức phức tạp để thể hiện các luồng
 chương trình khác nhau. Các công cụ có dạng `./tool [options]
 http://auth@host/path#hash` sẽ không đáp ứng được nhu cầu.
@@ -28,6 +29,12 @@ tạo một kết nối (dựa trên TCP) đến một endpoint, địa chỉ k�
 hiện bởi bốn thông số <IP nguồn, port nguồn, IP đích, port đích>, do đó số lượng
 kết nối bị giới hạn bởi con số 65536. Để đạt được mục tiêu 1M kết nối,  phải có
 một cựm (cluster) cá client phối hợp với nhau.
+
+Các chương trình benchmark hiện tại trên thị trường chưa đáp ứng được các yêu
+cầu nêu trên, do đó chung tôi tự xây dựng một framework có tên Gobench. Gobench
+hiện tại đạt được các mục tiêu (1), (2) và (3), và được host tại
+https://github.com/gobench-io/gobench. Chúng tôi đang tích cực phát triển chức
+năng (4) cho bản release v0.1.0.
 
 Bài báo này được chia thành các mục như sau.
 Mục 2 giới thiệu cơ chế hoạt động của Gobench.
