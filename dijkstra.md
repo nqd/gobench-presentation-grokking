@@ -1,3 +1,6 @@
+Gobench, một benchmark framework
+
+Tác giả Nguyễn Quốc Đính, 
 ## 1. Giới thiệu Gobench
 
 Ở Veriksystems, chúng tôi làm việc với các hệ thống Internet of Things (IoT).
@@ -20,8 +23,11 @@ gian, và tốt nhất nằm trên biểu đồ. Việc chỉ tóm gọn kết q
 đi việc quan sát tính cale up/down trong quá trình benchmark.
 
 (4) Scalable hỗ trợ đến 1 triệu kết nối đồng thời cho các protocol đòi hỏi có
-consistant connection như MQTT hay NATS. Đặt 
-
+consistant connection như MQTT hay NATS. Trong trường hợp chương trình client
+tạo một kết nối (dựa trên TCP) đến một endpoint, địa chỉ kết nối này được thể
+hiện bởi bốn thông số <IP nguồn, port nguồn, IP đích, port đích>, do đó số lượng
+kết nối bị giới hạn bởi con số 65536. Để đạt được mục tiêu 1M kết nối,  phải có
+một cựm (cluster) cá client phối hợp với nhau.
 
 Bài báo này được chia thành các mục như sau.
 Mục 2 giới thiệu cơ chế hoạt động của Gobench.
