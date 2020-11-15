@@ -114,7 +114,7 @@ các khái niệm được sử dụng trong hệ thống như sau.
 
 <img src="./gobench-model.svg" alt="gobench model" style="width: 100%;"/>
 
-Hình 1: Mô hình hoạt động của Gobench
+Hình 1: Mô hình hoạt động của Gobench.
 
 ### 2.3. Master
 
@@ -146,14 +146,33 @@ Master là single point of failure (SPOF) của hệ thống. Sẽ rất dễ d�
 trạng thái hoạt động của master. Với việc chỉ có duy nhất một master, khả năng
 master chết rất ít khi xảy ra. Nếu master chết, một instance mới có thể được
 dựng lên, bất kì job nào đang chạy sẽ bị hủy. Tester có thể chạy lại kịch bản
-này.
+này nếu muốn.
 
 ### 2.4. Agent
 
 Mỗi hệ thống Gobench có một hoặc nhiều agent. Agent có thể chạy trên bất cứ hệ
-thống Unix nào.
+thống Unix nào. Agent giữ liên lạc với master để tạo nên cluster. Khi agent nhận
+job từ master, nó sẽ chạy file executor trong một thread riêng biệt. Agent và
+Executor liên lạc với nhau thông qua Unix socket. 
+
+Agent đóng vai trò trung gian trong việc báo cáo metrics từ Executor đến Master.
+Và ở chiều ngược lại, trong quá trình hoạt động, nếu Agent nhận lệnh hủy một
+job, nó sẽ giết Executor thread.
+
+Trên nền Unix socket, giao tiếp giữa Agent và Executor là grpc như Hình 2.
+
+<img src="./gobench-agent-executor.svg" alt="gobench model" class="center"
+style="width: 60%;">
+
+Hình 2: Giao tiếp giữa Agent và Executor.
+
+<!-- Mỗi host sẽ chạy hoặc là Master hoặc là Agent, và mỗi Agent chỉ tạo chạy duy
+nhất một Executor. Nguyên nhân cho việc này là benchmark thường sử dụng nhiều
+tài nguyên (CPU, RAM, băng thông mạng). Tester nên cài đặt để Agent và Executor
+sử dụng hết các tài nguyên nó đang có -->
 
 ### 2.5. Executor
+
 
 
 ## 3. Thực hiện
