@@ -55,12 +55,10 @@ Với Gobench, CLI option không đáp ứng được nhu cầu
 Trở ngại của DSL là người dùng phải học ngôn ngữ mô tả mới, và DSL bộc lộ hạn
 chế khi kịch bản mô phỏng trở nên phức tạp.
 
-Vì Gobench được xây dựng trên Go, kịch bản cũng được viết bằng Go.
+Vì Gobench được xây dựng trên Go, kịch bản cũng được viết bằng Go. ...
 
 ```
 package main
-
-// This runs a benchmark for 30 seconds, using 12 threads
 
 import (
 	"context"
@@ -75,7 +73,7 @@ func export() scenario.Vus {
 	return scenario.Vus{
 		{
 			Nu:   12,
-			Rate: 1000,
+			Rate: 100,
 			Fu:   f,
 		},
 	}
@@ -88,6 +86,18 @@ func f(ctx context.Context, vui int) {
 	}
 }
 ```
+
+Một kịch bản phải định nghĩa một `func export()` trả về một mảng các virtual
+user (Vu). `Vu` cho phép tester định nghĩa hành vi của một người dùng trong
+chương trình test.
+
+Mỗi `vu` được định nghĩa bởi ba thông số :
+1. `Nu` là tổng số lượng user cho loại `vu` này.
+2. `Rate` là tốc độ khởi tạo user của lớp `vu` này. Gobench không tạo tất cả
+user cùng một lúc, mà tuần tự dựa trên phân bố Poisson. Trong ví dụ trên 12 user
+được khởi tạo với lamda = 100. Như vậy trung bình sau 0.12 giây toàn bộ user của
+lớp `vu` này sẽ được tạo xong.
+3. `Fu` định nghĩa hành vi của một `vu`.
 
 <img src="./gobench-model.svg" alt="gobench model" style="width: 100%;"/>
 
