@@ -120,9 +120,30 @@ Hình 1: Mô hình hoạt động của Gobench
 
 Mỗi hệ thống Gobench có một master. Như tên gọi của nó, master là điều phối viên
 của hệ thống. Đầu tiên, master là nơi giao tiếp với tester thông qua Web UI hoặc
-HTTP API. Master tuần tự lấy các kịch bản ra để thực thi.
+HTTP API. Master tuần tự lấy các kịch bản ra để thực thi. Vào mỗi thời điểm, chỉ
+một kịch bản hoạt động.
 
-Để chạy một kịch bản, master trước tiên dịch kịch bản thành một file thực thi, 
+Để chạy một kịch bản, master trước tiên dịch kịch bản thành một file thực thi,
+sau đó gởi file này đến các agent trong cluster. Mỗi agent nhận được một công
+việc (job) bao gồm (1) file thực thi, (2) `Nu_{i}`, `Rate_{i}` là số lượng user
+và tốc độ khởi tạo tương ứng cho agent `i`. Dĩ nhiên tổng `Nu_{i}`, `Rate_{i}`
+phải bằng Nu và Rate tương ứng. Một cách đơn giản, Gobench chia điều Nu và Rate
+trên tổng số các agent trong hệ thống. Một cách phức tạp hơn `Nu_{i}` sẽ tỉ lệ
+thuận với tài nguyên (CPU, RAM, băng thông) của một agent. Chúng tôi chọn cách
+đơn giản trong implement của Gobench.
+
+Khi một kịch bản được thực thi, các agent sẽ báo báo các metric về master.
+Master lưu kết quả này vào trong cơ sở dữ liệu nhúng là sqlite3. Chúng tôi chọn
+sqlite3 vì CSDL này đi kèm với chương trình, đơn giản khi vận hành. Nghi ngại về
+tốc độ ghi của sqlite3 sẽ không thành vấn đề khi metrics được giản lượt hóa
+trước khi đưa về master (chúng tôi sẽ đề cập kỹ hơn trong phần sau). Là loại SQL
+cũng giúp cho việc truy vấn thuận tiện hơn các loại NoSQL nhúng khác.
+
+Master là single point of failure (SPOF) của hệ thống. Sẽ rất dễ dàng kiểm tra
+trạng thái hoạt động của master. Với việc chỉ có duy nhất một master, khả năng
+master chết rất ít khi xảy ra. Nếu master chết, một instance mới có thể được
+dựng lên, bất kì job nào đang chạy sẽ bị hủy. Tester có thể chạy lại kịch bản
+này.
 
 ### 2.4. Agent
 
