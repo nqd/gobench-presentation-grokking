@@ -1,6 +1,7 @@
 Gobench, một benchmark framework
 
-Tác giả Nguyễn Quốc Đính, 
+Tác giả Nguyễn Quốc Đính, Phạm Đức Thọ
+
 ## 1. Giới thiệu Gobench
 
 Ở Veriksystems, chúng tôi làm việc với các hệ thống Internet of Things (IoT).
@@ -10,20 +11,20 @@ Benchmark để nhìn thấy hiệu năng của hệ thống trước khi đưa 
 
 Mục tiêu:
 
-(1) Expressive: Kịch bản benchmark phải đủ phức phức tạp để thể hiện các luồng
+1. Expressive: Kịch bản benchmark phải đủ phức phức tạp để thể hiện các luồng
 chương trình khác nhau. Các công cụ có dạng `./tool [options]
 http://auth@host/path#hash` sẽ không đáp ứng được nhu cầu.
 
-(2) Nhiều loại protocol khác nhau.
+2. Nhiều loại protocol khác nhau.
 Bản chất của hệ thống IoT là sử dụng protocol. Bên cạnh HTTP, chúng tôi thường
 sử dụng MQTT, và NATS. Chương trình benchmark cần phải hỗ trợ nhiều loại
 protocol khác nhau và có thể dễ dàng mở rộng.
 
-(3) Kết quả thời gian thực: Các thông số benchmark phải được hiển thị theo thời
+3. Kết quả thời gian thực: Các thông số benchmark phải được hiển thị theo thời
 gian, và tốt nhất nằm trên biểu đồ. Việc chỉ tóm gọn kết quả cuối cùng làm mất
 đi việc quan sát tính cale up/down trong quá trình benchmark.
 
-(4) Scalable hỗ trợ đến 1 triệu kết nối đồng thời cho các protocol đòi hỏi có
+4. Scalable hỗ trợ đến 1 triệu kết nối đồng thời cho các protocol đòi hỏi có
 consistant connection như MQTT hay NATS. Trong trường hợp chương trình client
 tạo một kết nối (dựa trên TCP) đến một endpoint, địa chỉ kết nối này được thể
 hiện bởi bốn thông số <IP nguồn, port nguồn, IP đích, port đích>, do đó số lượng
@@ -39,10 +40,57 @@ năng (4) cho bản release v0.1.0.
 Bài báo này được chia thành các mục như sau.
 Mục 2 giới thiệu cơ chế hoạt động của Gobench.
 Chúng tôi trình bày cách implement hệ thống ở Mục 3. Mục 4 so sánh hiệu năng của
-Gobench và một số chương trình mã nguồn mở. Chúng tôi chỉ so sánh hiệu năng của
-HTTP. Gobench hiện tại vẫn đang được phát triển tích cực, chúng tôi sẽ liệt kê những vấn đề todo ở Mục 5.
+Gobench và một số chương trình mã nguồn mở trong việc sử dụng HTTP client. Gobench hiện tại vẫn đang được phát triển tích cực, chúng tôi sẽ liệt kê những vấn đề todo ở Mục 5.
 
 ## 2. Cơ chế hoạt động
+
+Cũng như các chương trình benchmark khác, Gobench là một hoặc nhiều client tấn
+công vào một đối tượng (target) cần kiểm tra. Vấn đề đặt ra là kịch bản cho
+client hoạt động như thế nào. Có thể đơn giản là options cho CLI như hey, ab,
+vegeta; hoặc XML như Jmeter; hoặc domain specific language (DSL) như Gatling,
+MZBench; hoặc ngôn ngữ lập trình phổ biến như Nodejs ở k6, Python ở Locust.
+
+Với Gobench, CLI option không đáp ứng được nhu cầu
+
+Trở ngại của DSL là người dùng phải học ngôn ngữ mô tả mới, và DSL bộc lộ hạn
+chế khi kịch bản mô phỏng trở nên phức tạp.
+
+Vì Gobench được xây dựng trên Go, kịch bản cũng được viết bằng Go.
+
+```
+package main
+
+// This runs a benchmark for 30 seconds, using 12 threads
+
+import (
+	"context"
+	"log"
+	"time"
+
+	httpClient "github.com/gobench-io/gobench/clients/http"
+	"github.com/gobench-io/gobench/executor/scenario"
+)
+
+func export() scenario.Vus {
+	return scenario.Vus{
+		{
+			Nu:   12,
+			Rate: 1000,
+			Fu:   f,
+		},
+	}
+}
+
+func f(ctx context.Context, vui int) {
+	for {
+		log.Println("tic")
+		time.Sleep(1 * time.Second)
+	}
+}
+```
+
+<img src="./gobench-model.svg" alt="gobench model" style="width: 100%;"/>
+
 
 ## 3. Thực hiện
 
