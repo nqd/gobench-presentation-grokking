@@ -55,6 +55,8 @@ Với Gobench, CLI option không đáp ứng được nhu cầu
 Trở ngại của DSL là người dùng phải học ngôn ngữ mô tả mới, và DSL bộc lộ hạn
 chế khi kịch bản mô phỏng trở nên phức tạp.
 
+### 2.1. Kịch bản test
+
 Vì Gobench được xây dựng trên Go, kịch bản cũng được viết bằng Go. ...
 
 ```
@@ -94,10 +96,16 @@ chương trình test.
 Mỗi `vu` được định nghĩa bởi ba thông số :
 1. `Nu` là tổng số lượng user cho loại `vu` này.
 2. `Rate` là tốc độ khởi tạo user của lớp `vu` này. Gobench không tạo tất cả
-user cùng một lúc, mà tuần tự dựa trên phân bố Poisson. Trong ví dụ trên 12 user
-được khởi tạo với lamda = 100. Như vậy trung bình sau 0.12 giây toàn bộ user của
-lớp `vu` này sẽ được tạo xong.
-3. `Fu` định nghĩa hành vi của một `vu`.
+   user cùng một lúc, mà tuần tự dựa trên phân bố Poisson. Trong ví dụ trên 12
+   user được khởi tạo với lamda = 100. Như vậy trung bình sau 0.12 giây toàn bộ
+   user của lớp `vu` này sẽ được tạo xong.
+3. `Fu` định nghĩa hành vi của một `vu`. Ở ví dụ trên, user chi đơn giản in tic
+   sau mỗi một giây. 
+
+Mỗi user trong `vu` sẽ được chạy trong mỗi goroutine riêng biệt. Vì goroutine là
+một greenthread của go sử dụng ít tài nguyên, nên Gobench có khả năng tạo được
+một lượng lớn các user trong mỗi host.
+
 
 <img src="./gobench-model.svg" alt="gobench model" style="width: 100%;"/>
 
