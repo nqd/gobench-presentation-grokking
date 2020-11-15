@@ -83,7 +83,7 @@ func export() scenario.Vus {
 
 func f(ctx context.Context, vui int) {
 	for {
-		log.Println("tic")
+		log.Println("tictoc")
 		time.Sleep(1 * time.Second)
 	}
 }
@@ -99,8 +99,8 @@ Mỗi `vu` được định nghĩa bởi ba thông số :
    user cùng một lúc, mà tuần tự dựa trên phân bố Poisson. Trong ví dụ trên 12
    user được khởi tạo với lamda = 100. Như vậy trung bình sau 0.12 giây toàn bộ
    user của lớp `vu` này sẽ được tạo xong.
-3. `Fu` định nghĩa hành vi của một `vu`. Ở ví dụ trên, user chi đơn giản in tic
-   sau mỗi một giây. 
+3. `Fu` định nghĩa hành vi của một `vu`. Ở ví dụ trên, user chi đơn giản in
+   tictoc sau mỗi một giây. 
 
 Mỗi user trong `vu` sẽ được chạy trong mỗi goroutine riêng biệt. Vì goroutine là
 một greenthread của go sử dụng ít tài nguyên, nên Gobench có khả năng tạo được
@@ -108,15 +108,21 @@ một lượng lớn các user trong mỗi host.
 
 ### 2.2. Master, Agent, và Executor
 
-Gobench khi nhận được một ngữ cảnh sẽ đưa vào hàng đợi, và thực thi tuần tự.
-Hình 1 mô tả cách thức hoạt động của Gobench. Để tiện theo dõi, chúng tôi giới
-thiệu các khái niệm được sử dụng trong hệ thống như sau.
+Gobench khi nhận được một kịch bản sẽ đưa vào hàng đợi và thực thi tuần tự. Hình
+1 mô tả cách thức hoạt động của Gobench. Để tiện theo dõi, chúng tôi giới thiệu
+các khái niệm được sử dụng trong hệ thống như sau.
 
 <img src="./gobench-model.svg" alt="gobench model" style="width: 100%;"/>
 
 Hình 1: Mô hình hoạt động của Gobench
 
 ### 2.3. Master
+
+Mỗi hệ thống Gobench có một master. Như tên gọi của nó, master là điều phối viên
+của hệ thống. Đầu tiên, master là nơi giao tiếp với tester thông qua Web UI hoặc
+HTTP API. Master tuần tự lấy các kịch bản ra để thực thi.
+
+Để chạy một kịch bản, master trước tiên dịch kịch bản thành một file thực thi, 
 
 ### 2.4. Agent
 
