@@ -106,8 +106,21 @@ Mỗi user trong `vu` sẽ được chạy trong mỗi goroutine riêng biệt. 
 một greenthread của go sử dụng ít tài nguyên, nên Gobench có khả năng tạo được
 một lượng lớn các user trong mỗi host.
 
+### 2.2. Master, Agent, và Executor
+
+Gobench khi nhận được một ngữ cảnh sẽ đưa vào hàng đợi, và thực thi tuần tự.
+Hình 1 mô tả cách thức hoạt động của Gobench. Để tiện theo dõi, chúng tôi giới
+thiệu các khái niệm được sử dụng trong hệ thống như sau.
 
 <img src="./gobench-model.svg" alt="gobench model" style="width: 100%;"/>
+
+Hình 1: Mô hình hoạt động của Gobench
+
+### 2.3. Master
+
+### 2.4. Agent
+
+### 2.5. Executor
 
 
 ## 3. Thực hiện
