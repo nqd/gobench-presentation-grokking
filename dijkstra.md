@@ -126,14 +126,20 @@ một kịch bản hoạt động.
 [Todo: hình cho dịch kịch bản - scenario.go, template.go, go.mod, go.sum ->
 executor.go]
 
+
+<img src="./gobench-compile-scenario.svg" alt="gobench compile senario"
+class="center" style="width: 60%;">
+
+Hình 2: Master tạo nên Executor từ kịch bản.
+
 Để chạy một kịch bản, master trước tiên dịch kịch bản thành một file thực thi
-gọi là executor, sau đó gởi file này đến các agent trong cluster. Mỗi agent nhận
-được một công việc (job) bao gồm (1) file thực thi, (2) `Nu_{i}`, `Rate_{i}` là
-số lượng user và tốc độ khởi tạo tương ứng cho agent `i`. Dĩ nhiên tổng
-`Nu_{i}`, `Rate_{i}` phải bằng Nu và Rate tương ứng. Một cách đơn giản, Gobench
-chia điều Nu và Rate trên tổng số các agent trong hệ thống. Một cách phức tạp
-hơn `Nu_{i}` sẽ tỉ lệ thuận với tài nguyên (CPU, RAM, băng thông) của một agent.
-Chúng tôi chọn cách đơn giản trong implement của Gobench.
+gọi là Executor như Hình 2, sau đó gởi file này đến các agent trong cluster. Mỗi
+agent nhận được một công việc (job) bao gồm (1) file thực thi, (2) `Nu_{i}`,
+`Rate_{i}` là số lượng user và tốc độ khởi tạo tương ứng cho agent `i`. Dĩ nhiên
+tổng `Nu_{i}`, `Rate_{i}` phải bằng Nu và Rate tương ứng. Một cách đơn giản,
+Gobench chia điều Nu và Rate trên tổng số các agent trong hệ thống. Một cách
+phức tạp hơn `Nu_{i}` sẽ tỉ lệ thuận với tài nguyên (CPU, RAM, băng thông) của
+một agent. Chúng tôi chọn cách đơn giản trong implement của Gobench.
 
 Khi một kịch bản được thực thi, các agent sẽ báo báo các metric về master.
 Master lưu kết quả này vào trong cơ sở dữ liệu nhúng là sqlite3. Chúng tôi chọn
@@ -159,12 +165,12 @@ Agent đóng vai trò trung gian trong việc báo cáo metrics từ Executor đ
 Và ở chiều ngược lại, trong quá trình hoạt động, nếu Agent nhận lệnh hủy một
 job, nó sẽ giết Executor thread.
 
-Trên nền Unix socket, giao tiếp giữa Agent và Executor là gRPC như Hình 2.
+Trên nền Unix socket, giao tiếp giữa Agent và Executor là gRPC như Hình 3.
 
 <img src="./gobench-agent-executor.svg" alt="gobench model" class="center"
 style="width: 60%;">
 
-Hình 2: Giao tiếp giữa Agent và Executor.
+Hình 3: Giao tiếp giữa Agent và Executor.
 
 ### 2.5. Executor
 
