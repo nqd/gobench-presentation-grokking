@@ -123,10 +123,6 @@ của hệ thống. Đầu tiên, master là nơi giao tiếp với tester thôn
 HTTP API. Master tuần tự lấy các kịch bản ra để thực thi. Vào mỗi thời điểm, chỉ
 một kịch bản hoạt động.
 
-[Todo: hình cho dịch kịch bản - scenario.go, template.go, go.mod, go.sum ->
-executor.go]
-
-
 <img src="./gobench-compile-scenario.svg" alt="gobench compile senario"
 class="center" style="width: 60%;">
 
