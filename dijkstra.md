@@ -1,6 +1,8 @@
-Gobench, một benchmark framework
+# Gobench, một benchmark framework
 
-Tác giả Nguyễn Quốc Đính, Phạm Đức Thọ
+*Tác giả: Nguyễn Quốc Đính, Phạm Đức Thọ*
+
+19/11/2020
 
 ## 1. Giới thiệu Gobench
 
@@ -182,15 +184,18 @@ với đối tượng cần benchmark. Cứ mỗi hành vi của một client s�
 trong metrics. Ví dụ với HTTP thì số lượt request thành công, thất bại, hay độ
 trễ (delay) của request (ns) được báo cáo đến metrics collector ở ngay bên trong
 Executor. Executor tổng hợp (aggregate) các metric này trước khi chuyển đến
-Agent và cuôi cùng tập hợp về Master mỗi 10s. Chúng tôi chọn phương pháp này để
+Agent và cuối cùng tập hợp về Master mỗi 10s. Chúng tôi chọn phương pháp này để
 giảm số lượng message gởi về Master.
 
 Các metric Gobench hỗ trợ là counter, histogram, và gauge.
 
+<!-- ## 3. Thực hiện -->
 
-## 3. Thực hiện
+## 3. Hiệu năng
 
-## 4. Hiệu năng
+[Tiếp tục]
 
-## 5. Dự định
+## 4. Kết luận
+
+Cho đến thời điểm viết bài báo này Gobench 
 
