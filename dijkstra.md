@@ -166,13 +166,24 @@ style="width: 60%;">
 
 Hình 2: Giao tiếp giữa Agent và Executor.
 
-<!-- Mỗi host sẽ chạy hoặc là Master hoặc là Agent, và mỗi Agent chỉ tạo chạy duy
-nhất một Executor. Nguyên nhân cho việc này là benchmark thường sử dụng nhiều
-tài nguyên (CPU, RAM, băng thông mạng). Tester nên cài đặt để Agent và Executor
-sử dụng hết các tài nguyên nó đang có -->
-
 ### 2.5. Executor
 
+Executor khởi chạy bởi Agent khi thực thi một job mới. Mỗi host sẽ chạy hoặc là
+Master hoặc là Agent, và mỗi Agent chỉ tạo chạy duy nhất một Executor. Nguyên
+nhân cho việc này là benchmark thường sử dụng nhiều tài nguyên (CPU, RAM, băng
+thông mạng). Tester nên cài đặt để Agent và Executor sử dụng hết các tài nguyên
+nó đang có.
+
+Executor là nơi chạy kịch bản benchmark. Các kịch bản này thường sử dụng các thư
+viện (hiện tại là HTTP client, MQTT client, NATs client) của Gobench tương tác
+với đối tượng cần benchmark. Cứ mỗi hành vi của một client sẽ được ghi nhận lại
+trong metrics. Ví dụ với HTTP thì số lượt request thành công, thất bại, hay độ
+trễ (delay) của request (ns) được báo cáo đến metrics collector ở ngay bên trong
+Executor. Executor tổng hợp (aggregate) các metric này trước khi chuyển đến
+Agent và cuôi cùng tập hợp về Master mỗi 10s. Chúng tôi chọn phương pháp này để
+giảm số lượng message gởi về Master.
+
+Các metric Gobench hỗ trợ là counter, histogram, và gauge.
 
 
 ## 3. Thực hiện
