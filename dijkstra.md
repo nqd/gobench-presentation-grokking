@@ -1,4 +1,4 @@
-# Gobench, một benchmark framework
+Gobench, một benchmark framework
 
 *Tác giả: Nguyễn Quốc Đính, Phạm Đức Thọ*
 
@@ -118,7 +118,7 @@ các khái niệm được sử dụng trong hệ thống như sau.
 
 Hình 1: Mô hình hoạt động của Gobench.
 
-### 2.3. Master
+#### 2.2.1. Master
 
 Mỗi hệ thống Gobench có một master. Như tên gọi của nó, master là điều phối viên
 của hệ thống. Đầu tiên, master là nơi giao tiếp với tester thông qua Web UI hoặc
@@ -152,7 +152,7 @@ master chết rất ít khi xảy ra. Nếu master chết, một instance mới 
 dựng lên, bất kì job nào đang chạy sẽ bị hủy. Tester có thể chạy lại kịch bản
 này nếu muốn.
 
-### 2.4. Agent
+#### 2.2.2. Agent
 
 Mỗi hệ thống Gobench có một hoặc nhiều Agent. Agent có thể chạy trên bất cứ hệ
 thống Unix nào. Agent giữ liên lạc với master để tạo nên cluster. Khi agent nhận
@@ -170,7 +170,7 @@ style="width: 60%;">
 
 Hình 3: Giao tiếp giữa Agent và Executor.
 
-### 2.5. Executor
+#### 2.2.3. Executor
 
 Executor khởi chạy bởi Agent khi thực thi một job mới. Mỗi host sẽ chạy hoặc là
 Master hoặc là Agent, và mỗi Agent chỉ tạo chạy duy nhất một Executor. Nguyên
@@ -190,6 +190,9 @@ giảm số lượng message gởi về Master.
 Các metric Gobench hỗ trợ là counter, histogram, và gauge.
 
 <!-- ## 3. Thực hiện -->
+### 2.3. Tạo một client mới
+
+[Tiếp tục]
 
 ## 3. Hiệu năng
 
@@ -197,5 +200,21 @@ Các metric Gobench hỗ trợ là counter, histogram, và gauge.
 
 ## 4. Kết luận
 
-Cho đến thời điểm viết bài báo này Gobench 
+Có rất nhiều chương trình benchmark vẫn đang được tích cực phát triển. Một số
+theo hướng CLI như Wrk, Apachebench, Drill, Hey, Vegeta, hoặc số chỉ hỗ trợ HTTP
+như Locust, k6.
+
+Chương trình gần nhất đạt được bốn mục tiêu ban đầu chúng tôi đưa ra có thể kể
+đến là MZBench, Gatling, và Artillery. MZBench là một hệ thống rất thú vị được
+viết bởi MachineZone với Erlang. MZBench scaling rất tốt nhờ vào hỗ trợ của OTP;
+tuy nhiên đáng tiếc là các tác giả đã ngưng phát triển, chương trình tải về từ
+Github bị lỗi không chạy được. Gatling phát triển với Scala và hỗ trợ nhiều loại
+protocol khác nhau. Bản Community tuy vậy không hỗ trợ scaling. Cả MZBench và
+Gatling cho phép viết kịch bản bằng DSL riêng. 
+
+Cho đến thời điểm viết bài báo này Gobench đã đạt được ba trong bốn mục tiêu ban
+đầu được đặt ra là (1) expressive, (2) hỗ trợ HTTP, MQTT, và NATs, và (3) Kết
+qủa thời gian thực được hiện lên dashboard.
+
+
 
