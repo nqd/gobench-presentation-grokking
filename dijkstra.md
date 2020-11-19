@@ -150,7 +150,7 @@ này nếu muốn.
 
 ### 2.4. Agent
 
-Mỗi hệ thống Gobench có một hoặc nhiều agent. Agent có thể chạy trên bất cứ hệ
+Mỗi hệ thống Gobench có một hoặc nhiều Agent. Agent có thể chạy trên bất cứ hệ
 thống Unix nào. Agent giữ liên lạc với master để tạo nên cluster. Khi agent nhận
 job từ master, nó sẽ chạy file executor trong một thread riêng biệt. Agent và
 Executor liên lạc với nhau thông qua Unix socket. 
@@ -159,7 +159,7 @@ Agent đóng vai trò trung gian trong việc báo cáo metrics từ Executor đ
 Và ở chiều ngược lại, trong quá trình hoạt động, nếu Agent nhận lệnh hủy một
 job, nó sẽ giết Executor thread.
 
-Trên nền Unix socket, giao tiếp giữa Agent và Executor là grpc như Hình 2.
+Trên nền Unix socket, giao tiếp giữa Agent và Executor là gRPC như Hình 2.
 
 <img src="./gobench-agent-executor.svg" alt="gobench model" class="center"
 style="width: 60%;">
