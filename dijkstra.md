@@ -192,7 +192,28 @@ Các metric Gobench hỗ trợ là counter, histogram, và gauge.
 <!-- ## 3. Thực hiện -->
 ### 2.3. Tạo một client mới
 
-[Tiếp tục]
+Một trong những mục tiêu hàng đầu của Gobench là hỗ trợ nhiều protocol khác
+nhau. Để đạt được điều này, API để hỗ trợ client mới phải đơn giản.
+
+Gobench cung cấp hai API để một client báo cáo kết quả về như bên đưới. API đầu
+tiên khai báo các metric mà client này hỗ trợ. Ví dụ với MQTT có số lượng các
+kết nối thành công, thất bại, độ trễ kết nối, số lượng message pub và sub với
+các QoS bằng 0, 1, hoặc 2.
+
+```go
+import (
+    "github.com/gobench-io/gobench/executor"
+)
+
+executor.Setup(groups)
+executor.Notify(metric-id, value)
+```
+
+API thứ hai dùng để báo cáo kết quả của một metric nào đấy (đã được đăng ký ở
+API đầu tiên).
+
+Việc hỗ trợ client mới dễ dàng đang là thế mạnh của Gobench. Thời gian sắp tới
+chúng tôi sẽ hỗ trợ một số giao thức phổ biến khác như gRPC, websocket.
 
 ## 3. Hiệu năng
 
