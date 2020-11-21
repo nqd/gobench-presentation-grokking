@@ -66,29 +66,29 @@ có thể hiểu được kịch bản (scenario) dưới đây.
 package main
 
 import (
-	"context"
-	"log"
-	"time"
+    "context"
+    "log"
+    "time"
 
-	httpClient "github.com/gobench-io/gobench/clients/http"
-	"github.com/gobench-io/gobench/executor/scenario"
+    httpClient "github.com/gobench-io/gobench/clients/http"
+    "github.com/gobench-io/gobench/executor/scenario"
 )
 
 func export() scenario.Vus {
-	return scenario.Vus{
-		{
-			Nu:   12,
-			Rate: 100,
-			Fu:   f,
-		},
-	}
+    return scenario.Vus{
+        {
+            Nu:   12,
+            Rate: 100,
+            Fu:   f,
+        },
+    }
 }
 
 func f(ctx context.Context, vui int) {
-	for {
-		log.Println("tictoc")
-		time.Sleep(1 * time.Second)
-	}
+    for {
+        log.Println("tictoc")
+        time.Sleep(1 * time.Second)
+    }
 }
 ```
 
@@ -168,10 +168,10 @@ job, nó sẽ giết Executor thread.
 
 Trên nền Unix socket, giao tiếp giữa Agent và Executor là gRPC như Hình 3.
 
-<img src="./gobench-Agent-executor.svg" alt="gobench model" class="center"
+<img src="./gobench-agent-executor.svg" alt="gobench model" class="center"
 style="width: 60%;">
 
-Hình 3: Giao tiếp giữa Agent và Executor.
+Hình 3: Giao tiếp giữa Agent và Executor là gRPC thông qua Unix socket.
 
 #### 2.2.3. Executor
 
@@ -204,9 +204,7 @@ kết nối thành công, thất bại, độ trễ kết nối, số lượng m
 các QoS bằng 0, 1, hoặc 2.
 
 ```go
-import (
-    "github.com/gobench-io/gobench/executor"
-)
+import "github.com/gobench-io/gobench/executor"
 
 executor.Setup(groups)
 executor.Notify(metric-id, value)
@@ -230,11 +228,11 @@ như Locust, k6.
 
 Chương trình gần nhất đạt được bốn mục tiêu ban đầu chúng tôi đưa ra có thể kể
 đến là MZBench, Gatling, và Artillery. MZBench là một hệ thống rất thú vị được
-viết bởi Machine Zone với Erlang. MZBench scaling rất tốt nhờ vào hỗ trợ của
-OTP; đáng tiếc là các tác giả đã ngưng phát triển MZBench, chương trình tải về
-từ Github bị lỗi không chạy được. Gobench chịu nhiều ảnh hưởng của MZBench về
-thiết kế. Gatling phát triển với Scala và hỗ trợ nhiều loại protocol khác nhau.
-Bản Community tuy vậy chỉ cho phép chạy trên một node. Cả MZBench và Gatling cho
+viết bởi Machine Zone với Erlang. MZBench scaling rất nhờ vào hỗ trợ của OTP;
+đáng tiếc là các tác giả đã ngưng phát triển MZBench, chương trình tải về từ
+Github bị lỗi không chạy được. Gobench chịu nhiều ảnh hưởng của MZBench về thiết
+kế. Gatling phát triển với Scala và hỗ trợ nhiều loại protocol khác nhau. Bản
+community tuy vậy chỉ cho phép chạy trên một node. Cả MZBench và Gatling cho
 phép viết kịch bản bằng DSL riêng. Artillery phát triển bởi công ty Shoreditch
 Ops bằng NodeJS; kịch bản có thể viết bằng Javascript, do đó khá dễ nắm bắt,
 giống Golang. Tuy nhiên chỉ với bản premium thì mới chạy phân tán trên nhiều
@@ -260,5 +258,5 @@ Thêm các loại client phổ biến khác như gRPC, websocket, graphQL cũng 
 danh sách cần phải làm.
 
 Nhận thấy một số tính năng thú vị của Gobench so với các chương trình khác trên
-thị trường và vẫn còn nhiều vấn đề thú vị khác cần giải quyết, vì vậy hãy xem
-đây là lời kiêu gọi của chúng tôi đến contributor.
+thị trường và vẫn còn nhiều vấn đề  khác cần giải quyết, vì vậy hãy xem đây là
+lời kiêu gọi của chúng tôi đến contributor.
