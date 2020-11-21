@@ -206,15 +206,22 @@ như Locust, k6.
 
 Chương trình gần nhất đạt được bốn mục tiêu ban đầu chúng tôi đưa ra có thể kể
 đến là MZBench, Gatling, và Artillery. MZBench là một hệ thống rất thú vị được
-viết bởi MachineZone với Erlang. MZBench scaling rất tốt nhờ vào hỗ trợ của OTP;
-tuy nhiên đáng tiếc là các tác giả đã ngưng phát triển, chương trình tải về từ
-Github bị lỗi không chạy được. Gatling phát triển với Scala và hỗ trợ nhiều loại
-protocol khác nhau. Bản Community tuy vậy không hỗ trợ scaling. Cả MZBench và
-Gatling cho phép viết kịch bản bằng DSL riêng. 
+viết bởi Machine Zone với Erlang. MZBench scaling rất tốt nhờ vào hỗ trợ của
+OTP; tuy nhiên đáng tiếc là các tác giả đã ngưng phát triển, chương trình tải về
+từ Github bị lỗi không chạy được. Gobench chịu nhiều ảnh hưởng của MZBench về
+thiết kế. Gatling phát triển với Scala và hỗ trợ nhiều loại protocol khác nhau.
+Bản Community tuy vậy chỉ cho phép chạy trên một node. Cả MZBench và Gatling cho
+phép viết kịch bản bằng DSL riêng. Artillery phát triển bởi công ty Shoreditch
+Ops bằng NodeJS; kịch bản có thể viết bằng Javascript, do đó khá dễ nắm bắt,
+giống Golang. Tuy nhiên chỉ với bản premium thì mới chạy phân tán trên nhiều
+node được. Và chính vì sử dụng NodeJS nên chương trình không tận dụng được nhiều
+core của benchmark client.
+
+[Một vài kết luận về hiệu năng, sau khi hoàn thành Mục 3]
 
 Cho đến thời điểm viết bài báo này Gobench đã đạt được ba trong bốn mục tiêu ban
-đầu được đặt ra là (1) expressive, (2) hỗ trợ HTTP, MQTT, và NATs, và (3) Kết
-qủa thời gian thực được hiện lên dashboard.
+đầu được đặt ra là (1) expressive, (2) hỗ trợ nhiều protocol là HTTP, MQTT, và
+NATs, và (3) Kết qủa thời gian thực được hiện lên dashboard.
 
 
 
