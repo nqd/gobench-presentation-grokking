@@ -13,28 +13,27 @@ dưới tải lớn.
 
 Đặt tính của hệ thống IoT là có nhiều loại protocol khác nhau, và thường giữ kết
 nối giữa client và server. Sau khảo sát thấy các công cụ mã nguồn mở hiện tại
-chưa đáp ứng được nhu cầu, chúng tôi xây dựng Gobech một framework mã nguồn mở
-cho benchmark bằng golang. Gobech được xây dựng với bốn mục tiêu sau:
+chưa đáp ứng được nhu cầu, chúng tôi xây dựng Gobech một benchmark framework mã
+nguồn mở bằng golang. Gobech được xây dựng với bốn mục tiêu sau:
 
 1. Expressive: Kịch bản benchmark phải đủ phức phức tạp để thể hiện các luồng
-chương trình khác nhau. Các công cụ có dạng `./tool [options]
-http://auth@host/path#hash` sẽ không đáp ứng được nhu cầu.
+   chương trình khác nhau. Các công cụ có dạng `./tool [options]
+   http://auth@host/path#hash` sẽ không đáp ứng được nhu cầu.
 
-2. Nhiều loại protocol khác nhau.
-Bản chất của hệ thống IoT là sử dụng protocol. Bên cạnh HTTP, chúng tôi thường
-sử dụng MQTT, và NATS. Chương trình benchmark cần phải hỗ trợ nhiều loại
-protocol khác nhau và có thể dễ dàng mở rộng.
+2. Nhiều loại protocol khác nhau. Bên cạnh HTTP, chúng tôi thường sử dụng MQTT,
+   và NATS. Chương trình benchmark cần phải hỗ trợ nhiều loại protocol khác nhau
+   và có thể dễ dàng mở rộng.
 
-3. Kết quả thời gian thực: Các thông số benchmark phải được hiển thị theo thời
-gian, và tốt nhất nằm trên biểu đồ. Việc chỉ tóm gọn kết quả cuối cùng làm mất
-đi việc quan sát tính cale up/down trong quá trình benchmark.
+3. Kết quả thời gian thực. Các thông số benchmark phải được hiển thị theo thời
+   gian, và tốt nhất nằm trên biểu đồ. Việc chỉ tóm gọn kết quả cuối cùng làm
+   mất đi việc quan sát tính cale up/down trong quá trình benchmark.
 
 4. Scalable hỗ trợ đến 1 triệu kết nối đồng thời cho các protocol đòi hỏi có
-consistant connection như MQTT hay NATS. Trong trường hợp chương trình client
-tạo một kết nối (dựa trên TCP) đến một endpoint, địa chỉ kết nối này được thể
-hiện bởi bốn thông số <IP nguồn, port nguồn, IP đích, port đích>, do đó số lượng
-kết nối bị giới hạn bởi con số 65536. Để đạt được mục tiêu 1M kết nối,  phải có
-một cựm (cluster) cá client phối hợp với nhau.
+   consistant connection như MQTT hay NATS. Trong trường hợp chương trình client
+   tạo một kết nối (dựa trên TCP) đến một endpoint, địa chỉ kết nối này được thể
+   hiện bởi bốn thông số <IP nguồn, port nguồn, IP đích, port đích>, do đó số
+   lượng kết nối bị giới hạn bởi con số 65536. Để đạt được mục tiêu 1M kết nối,
+   phải có một cựm (cluster) cá client phối hợp với nhau.
 
 Vào thời điểm viết bài báo nào, Gobench đã đạt được các mục tiêu (1), (2) và
 (3), và được host tại https://github.com/gobench-io/gobench. Chúng tôi đang tích
