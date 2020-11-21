@@ -201,13 +201,13 @@ Các metric Gobench hỗ trợ là counter, histogram, và gauge.
 ## 4. Kết luận
 
 Có rất nhiều chương trình benchmark vẫn đang được tích cực phát triển. Một số
-theo hướng CLI như Wrk, Apachebench, Drill, Hey, Vegeta, hoặc số chỉ hỗ trợ HTTP
+theo hướng CLI như Wrk, Apachebench, Drill, Hey, Vegeta. Một số chỉ hỗ trợ HTTP
 như Locust, k6.
 
 Chương trình gần nhất đạt được bốn mục tiêu ban đầu chúng tôi đưa ra có thể kể
 đến là MZBench, Gatling, và Artillery. MZBench là một hệ thống rất thú vị được
 viết bởi Machine Zone với Erlang. MZBench scaling rất tốt nhờ vào hỗ trợ của
-OTP; tuy nhiên đáng tiếc là các tác giả đã ngưng phát triển, chương trình tải về
+OTP; đáng tiếc là các tác giả đã ngưng phát triển MZBench, chương trình tải về
 từ Github bị lỗi không chạy được. Gobench chịu nhiều ảnh hưởng của MZBench về
 thiết kế. Gatling phát triển với Scala và hỗ trợ nhiều loại protocol khác nhau.
 Bản Community tuy vậy chỉ cho phép chạy trên một node. Cả MZBench và Gatling cho
@@ -222,6 +222,11 @@ core của benchmark client.
 Cho đến thời điểm viết bài báo này Gobench đã đạt được ba trong bốn mục tiêu ban
 đầu được đặt ra là (1) expressive, (2) hỗ trợ nhiều protocol là HTTP, MQTT, và
 NATs, và (3) Kết qủa thời gian thực được hiện lên dashboard.
+
+Chúng tôi đã sử dung Gobench để benchmark một hệ thống IoT khá phức tạp, bao gồm
+cả HTTP và MQTT trong mỗi `vu`. Benchmark client chỉ sử dung 100% CPU, với một
+số thời điểm tăng lên 250% CPU của tổng 800% CPU (8 core) khi số lượng vu =
+10000. 
 
 
 
