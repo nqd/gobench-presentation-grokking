@@ -7,11 +7,14 @@ Gobench, một benchmark framework
 ## 1. Giới thiệu Gobench
 
 Ở Veriksystems, chúng tôi làm việc với các hệ thống Internet of Things (IoT).
-Phát triển chức năng mới.
-Benchmark để nhìn thấy hiệu năng của hệ thống trước khi đưa ra thị trường.
+Khi phát triển hệ thống mới, chúng tôi có nhu cầu benchmark để kiểm tra tính bền
+vững (robustness), tính sẵn dùng (availability), và xử lý lỗi (error handling)
+dưới tải lớn.
 
-
-Mục tiêu:
+Đặt tính của hệ thống IoT là có nhiều loại protocol khác nhau, và thường giữ kết
+nối giữa client và server. Sau khảo sát thấy các công cụ mã nguồn mở hiện tại
+chưa đáp ứng được nhu cầu, chúng tôi xây dựng Gobech một framework mã nguồn mở
+cho benchmark bằng golang. Gobech được xây dựng với bốn mục tiêu sau:
 
 1. Expressive: Kịch bản benchmark phải đủ phức phức tạp để thể hiện các luồng
 chương trình khác nhau. Các công cụ có dạng `./tool [options]
@@ -33,16 +36,15 @@ hiện bởi bốn thông số <IP nguồn, port nguồn, IP đích, port đích
 kết nối bị giới hạn bởi con số 65536. Để đạt được mục tiêu 1M kết nối,  phải có
 một cựm (cluster) cá client phối hợp với nhau.
 
-Các chương trình benchmark hiện tại trên thị trường chưa đáp ứng được các yêu
-cầu nêu trên, do đó chung tôi tự xây dựng một framework có tên Gobench. Gobench
-hiện tại đạt được các mục tiêu (1), (2) và (3), và được host tại
-https://github.com/gobench-io/gobench. Chúng tôi đang tích cực phát triển chức
-năng (4) cho bản release v0.1.0.
+Vào thời điểm viết bài báo nào, Gobench đã đạt được các mục tiêu (1), (2) và
+(3), và được host tại https://github.com/gobench-io/gobench. Chúng tôi đang tích
+cực phát triển chức năng (4) cho bản release v0.1.0.
 
-Bài báo này được chia thành các mục như sau.
-Mục 2 giới thiệu cơ chế hoạt động của Gobench.
-Chúng tôi trình bày cách implement hệ thống ở Mục 3. Mục 4 so sánh hiệu năng của
-Gobench và một số chương trình mã nguồn mở trong việc sử dụng HTTP client. Gobench hiện tại vẫn đang được phát triển tích cực, chúng tôi sẽ liệt kê những vấn đề todo ở Mục 5.
+Bài báo này được chia thành các mục như sau. Mục 2 giới thiệu cơ chế hoạt động
+của Gobench. Chúng tôi trình bày cách implement hệ thống ở Mục 3. Mục 4 so sánh
+hiệu năng của Gobench và một số chương trình mã nguồn mở trong việc sử dụng HTTP
+client. Gobench hiện tại vẫn đang được phát triển tích cực, chúng tôi sẽ liệt kê
+những vấn đề todo ở Mục 5.
 
 ## 2. Cơ chế hoạt động
 
@@ -213,7 +215,7 @@ API thứ hai dùng để báo cáo kết quả của một metric nào đấy (
 API đầu tiên).
 
 Việc hỗ trợ client mới dễ dàng đang là thế mạnh của Gobench. Thời gian sắp tới
-chúng tôi sẽ hỗ trợ một số giao thức phổ biến khác như gRPC, websocket.
+chúng tôi sẽ hỗ trợ một số giao thức phổ biến khác như gRPC, websocket, graphQL.
 
 ## 3. Hiệu năng
 
@@ -249,5 +251,9 @@ cả HTTP và MQTT trong mỗi `vu`. Benchmark client chỉ sử dung 100% CPU, 
 số thời điểm tăng lên 250% CPU của tổng 800% CPU (8 core) khi số lượng `vu` =
 10000.
 
-Trong thời gian sắp tới chúng tôi sẽ xây dựng mục tiêu số (4) là tạo ra scalable
-benchmark có khả năng tạo đến 1 triệu kết nối đồng thời.
+Nếu chỉ chạy trong một node thì khả năng benchmark sẽ bị giới hạn, trong thời
+gian sắp tới chúng tôi sẽ xây dựng mục tiêu số (4) là tạo ra scalable benchmark
+có khả năng tạo đến 1 triệu kết nối đồng thời.
+
+Thêm các loại client phổ biến khác như gRPC, websocket, graphQL cũng nằm trong
+danh sách cần phải làm. 
