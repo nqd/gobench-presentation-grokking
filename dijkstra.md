@@ -121,52 +121,54 @@ Hình 1: Mô hình hoạt động của Gobench.
 
 #### 2.2.1. Master
 
-Mỗi hệ thống Gobench có một master. Như tên gọi của nó, master là điều phối viên
-của hệ thống. Đầu tiên, master là nơi giao tiếp với tester thông qua Web UI hoặc
+Mỗi hệ thống Gobench có một Master. Như tên gọi của nó, Master là điều phối viên
+của hệ thống. Đầu tiên, Master là nơi giao tiếp với tester thông qua Web UI hoặc
 HTTP API. Master tuần tự lấy các kịch bản ra để thực thi. Vào mỗi thời điểm, chỉ
 một kịch bản hoạt động.
 
 <img src="./gobench-compile-scenario.svg" alt="gobench compile senario"
 class="center" style="width: 60%;">
 
-Hình 2: Master tạo nên Executor từ kịch bản.
+Hình 2: Master tạo nên Executor từ kịch bản. scenario.go là kịch bản người dùng
+tạo nên. template.go là mã nguồn được Master tạo nên. Tester có thể khai báo hai
+file go.mod và go.sum để chỉ định các package phụ thuộc.
 
-Để chạy một kịch bản, master trước tiên dịch kịch bản thành một file thực thi
-gọi là Executor như Hình 2, sau đó gởi file này đến các agent trong cluster. Mỗi
-agent nhận được một công việc (job) bao gồm (1) file thực thi, (2) `Nu_{i}`,
-`Rate_{i}` là số lượng user và tốc độ khởi tạo tương ứng cho agent `i`. Dĩ nhiên
+Để chạy một kịch bản, Master trước tiên dịch kịch bản thành một file thực thi
+gọi là Executor như Hình 2, sau đó gởi file này đến các Agent trong cluster. Mỗi
+Agent nhận được một công việc (job) bao gồm (1) file thực thi, (2) `Nu_{i}`,
+`Rate_{i}` là số lượng user và tốc độ khởi tạo tương ứng cho Agent `i`. Dĩ nhiên
 tổng `Nu_{i}`, `Rate_{i}` phải bằng Nu và Rate tương ứng. Một cách đơn giản,
-Gobench chia điều Nu và Rate trên tổng số các agent trong hệ thống. Một cách
+Gobench chia điều Nu và Rate trên tổng số các Agent trong hệ thống. Một cách
 phức tạp hơn `Nu_{i}` sẽ tỉ lệ thuận với tài nguyên (CPU, RAM, băng thông) của
-một agent. Chúng tôi chọn cách đơn giản trong implement của Gobench.
+một Agent. Chúng tôi chọn cách đơn giản trong implement của Gobench.
 
-Khi một kịch bản được thực thi, các agent sẽ báo báo các metric về master.
+Khi một kịch bản được thực thi, các Agent sẽ báo báo các metric về Master.
 Master lưu kết quả này vào trong cơ sở dữ liệu nhúng là sqlite3. Chúng tôi chọn
 sqlite3 vì CSDL này đi kèm với chương trình, đơn giản khi vận hành. Nghi ngại về
-tốc độ ghi của sqlite3 sẽ không thành vấn đề khi metrics được giản lượt hóa
-trước khi đưa về master (chúng tôi sẽ đề cập kỹ hơn trong phần sau). Là loại SQL
-cũng giúp cho việc truy vấn thuận tiện hơn các loại NoSQL nhúng khác.
+tốc độ ghi của sqlite3 sẽ không thành vấn đề khi metric được giản lượt hóa trước
+khi đưa về Master (chúng tôi sẽ đề cập kỹ hơn trong phần sau). Là loại SQL cũng
+giúp cho việc truy vấn thuận tiện hơn các loại NoSQL nhúng khác.
 
 Master là single point of failure (SPOF) của hệ thống. Sẽ rất dễ dàng kiểm tra
-trạng thái hoạt động của master. Với việc chỉ có duy nhất một master, khả năng
-master chết rất ít khi xảy ra. Nếu master chết, một instance mới có thể được
+trạng thái hoạt động của Master. Với việc chỉ có duy nhất một Master, khả năng
+Master chết rất ít khi xảy ra. Nếu Master chết, một instance mới có thể được
 dựng lên, bất kì job nào đang chạy sẽ bị hủy. Tester có thể chạy lại kịch bản
 này nếu muốn.
 
 #### 2.2.2. Agent
 
 Mỗi hệ thống Gobench có một hoặc nhiều Agent. Agent có thể chạy trên bất cứ hệ
-thống Unix nào. Agent giữ liên lạc với master để tạo nên cluster. Khi agent nhận
-job từ master, nó sẽ chạy file executor trong một thread riêng biệt. Agent và
+thống Unix nào. Agent giữ liên lạc với Master để tạo nên cluster. Khi Agent nhận
+job từ Master, nó sẽ chạy file executor trong một thread riêng biệt. Agent và
 Executor liên lạc với nhau thông qua Unix socket. 
 
-Agent đóng vai trò trung gian trong việc báo cáo metrics từ Executor đến Master.
+Agent đóng vai trò trung gian trong việc báo cáo metric từ Executor đến Master.
 Và ở chiều ngược lại, trong quá trình hoạt động, nếu Agent nhận lệnh hủy một
 job, nó sẽ giết Executor thread.
 
 Trên nền Unix socket, giao tiếp giữa Agent và Executor là gRPC như Hình 3.
 
-<img src="./gobench-agent-executor.svg" alt="gobench model" class="center"
+<img src="./gobench-Agent-executor.svg" alt="gobench model" class="center"
 style="width: 60%;">
 
 Hình 3: Giao tiếp giữa Agent và Executor.
@@ -182,8 +184,8 @@ nó đang có.
 Executor là nơi chạy kịch bản benchmark. Các kịch bản này thường sử dụng các thư
 viện (hiện tại là HTTP client, MQTT client, NATs client) của Gobench tương tác
 với đối tượng cần benchmark. Cứ mỗi hành vi của một client sẽ được ghi nhận lại
-trong metrics. Ví dụ với HTTP thì số lượt request thành công, thất bại, hay độ
-trễ (delay) của request (ns) được báo cáo đến metrics collector ở ngay bên trong
+trong metric. Ví dụ với HTTP thì số lượt request thành công, thất bại, hay độ
+trễ (delay) của request (ns) được báo cáo đến metric collector ở ngay bên trong
 Executor. Executor tổng hợp (aggregate) các metric này trước khi chuyển đến
 Agent và cuối cùng tập hợp về Master mỗi 10s. Chúng tôi chọn phương pháp này để
 giảm số lượng message gởi về Master.
