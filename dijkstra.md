@@ -252,8 +252,12 @@ số thời điểm tăng lên 250% CPU của tổng 800% CPU (8 core) khi số 
 10000.
 
 Nếu chỉ chạy trong một node thì khả năng benchmark sẽ bị giới hạn, trong thời
-gian sắp tới chúng tôi sẽ xây dựng mục tiêu số (4) là tạo ra scalable benchmark
-có khả năng tạo đến 1 triệu kết nối đồng thời.
+gian sắp tới (tuần, tháng) chúng tôi sẽ xây dựng mục tiêu số (4) là tạo ra
+scalable benchmark có khả năng tạo đến 1 triệu kết nối đồng thời.
 
 Thêm các loại client phổ biến khác như gRPC, websocket, graphQL cũng nằm trong
-danh sách cần phải làm. 
+danh sách cần phải làm.
+
+Nhận thấy một số tính năng thú vị của Gobench so với các chương trình khác trên
+thị trường và vẫn còn nhiều vấn đề thú vị khác cần giải quyết, vì vậy hãy xem
+đây là lời kiêu gọi của chúng tôi đến contributor.
