@@ -39,21 +39,19 @@ Vào thời điểm viết bài báo nào, Gobench đã đạt được các m�
 (3), và được host tại https://github.com/gobench-io/gobench. Chúng tôi đang tích
 cực phát triển chức năng (4) cho bản release v0.1.0.
 
-Bài báo này được chia thành các mục như sau. Mục 2 giới thiệu cơ chế hoạt động
-của Gobench. Chúng tôi trình bày cách implement hệ thống ở Mục 3. Mục 4 so sánh
-hiệu năng của Gobench và một số chương trình mã nguồn mở trong việc sử dụng HTTP
+Bài này được chia thành các mục như sau. Mục 2 giới thiệu cơ chế hoạt động của
+Gobench. Chúng tôi trình bày cách implement hệ thống ở Mục 3. Mục 4 so sánh hiệu
+năng của Gobench và một số chương trình mã nguồn mở trong việc sử dụng HTTP
 client. Gobench hiện tại vẫn đang được phát triển tích cực, chúng tôi sẽ liệt kê
 những vấn đề todo ở Mục 5.
 
 ## 2. Cơ chế hoạt động
 
-Cũng như các chương trình benchmark khác, Gobench là một hoặc nhiều client tấn
-công vào một đối tượng (target) cần kiểm tra. Vấn đề đặt ra là kịch bản cho
+Cũng như các chương trình benchmark khác, Gobench tạo ra một hoặc nhiều client
+tấn công vào một đối tượng (target) cần kiểm tra. Vấn đề đặt ra là kịch bản cho
 client hoạt động như thế nào. Có thể đơn giản là options cho CLI như hey, ab,
 vegeta; hoặc XML như Jmeter; hoặc domain specific language (DSL) như Gatling,
 MZBench; hoặc ngôn ngữ lập trình phổ biến như Nodejs ở k6, Python ở Locust.
-
-Với Gobench, CLI option không đáp ứng được nhu cầu
 
 Trở ngại của DSL là người dùng phải học ngôn ngữ mô tả mới, và DSL bộc lộ hạn
 chế khi kịch bản mô phỏng trở nên phức tạp.
