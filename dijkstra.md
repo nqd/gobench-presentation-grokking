@@ -58,9 +58,11 @@ chế khi kịch bản mô phỏng trở nên phức tạp.
 
 ### 2.1. Kịch bản test
 
-Vì Gobench được xây dựng trên Go, kịch bản cũng được viết bằng Go. ...
+Vì Gobench được xây dựng trên Go, kịch bản cũng được viết bằng Go. Và vì Go đơn
+giản, dễ đọc, dù bạn chưa từng làm việc với ngôn ngữ này trước đó, tôi tin bạn
+có thể hiểu được kịch bản (scenario) dưới đây.
 
-```
+```{go}
 package main
 
 import (
