@@ -6,10 +6,11 @@ Gobench, một benchmark framework
 
 ## 1. Giới thiệu Gobench
 
-Ở Veriksystems, chúng tôi làm việc với các hệ thống Internet of Things (IoT).
-Khi phát triển hệ thống mới, chúng tôi có nhu cầu benchmark để kiểm tra tính bền
-vững (robustness), tính sẵn dùng (availability), và xử lý lỗi (error handling)
-dưới tải lớn.
+Ở Veriksystems, chúng tôi làm việc với các hệ thống Internet of Things (IoT) từ
+xây dựng phần cứng, viết firmware, ứng dụng di động, đến hệ thống backend. Khi
+phát triển hệ thống mới, chúng tôi có nhu cầu, và cũng theo yêu cầu của khách
+hàng, benchmark để kiểm tra tính bền vững (robustness), tính sẵn dùng
+(availability), và xử lý lỗi (error handling) dưới tải lớn.
 
 Đặt tính của hệ thống IoT là có nhiều loại protocol khác nhau, và thường giữ kết
 nối giữa client và server. Sau khảo sát thấy các công cụ mã nguồn mở hiện tại
