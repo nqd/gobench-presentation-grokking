@@ -118,7 +118,8 @@ các khái niệm được sử dụng trong hệ thống như sau.
 
 <img src="./gobench-model.svg" alt="gobench model" style="width: 100%;"/>
 
-Hình 1: Mô hình hoạt động của Gobench.
+Hình 1: Mô hình hoạt động của Gobench bao gồm Master, Agent, và Executor. Master
+lưu kết quả vào cơ sở dữ liệu nhúng SQLite3.
 
 #### 2.2.1. Master
 
