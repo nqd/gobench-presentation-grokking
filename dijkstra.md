@@ -61,7 +61,7 @@ chế khi kịch bản mô phỏng trở nên phức tạp.
 
 Vì Gobench được xây dựng trên Go, kịch bản cũng được viết bằng Go. Và vì Go đơn
 giản, dễ đọc, dù bạn chưa từng làm việc với ngôn ngữ này trước đó, tôi tin bạn
-có thể hiểu được kịch bản (scenario) dưới đây.
+không mất nhiều thời gian để hiểu được kịch bản (scenario) dưới đây.
 
 ```{go}
 package main
@@ -87,14 +87,14 @@ func export() scenario.Vus {
 
 func f(ctx context.Context, vui int) {
     for {
-        log.Println("tictoc")
+        log.Println("tic toc")
         time.Sleep(1 * time.Second)
     }
 }
 ```
 
 Một kịch bản phải định nghĩa một `func export()` trả về một mảng các virtual
-user (Vu). `Vu` cho phép tester định nghĩa hành vi của một người dùng trong
+user (vu). `Vu` cho phép tester định nghĩa hành vi của một người dùng trong
 chương trình test.
 
 Mỗi `vu` được định nghĩa bởi ba thông số :
