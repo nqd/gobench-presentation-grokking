@@ -220,7 +220,8 @@ chúng tôi sẽ hỗ trợ một số giao thức phổ biến khác như gRPC,
 
 ## 3. Hiệu năng
 
-Ở mục này chúng tôi sẽ so sánh tốc độ Gobench với một vài chương trình khác.
+Ở mục này chúng tôi sẽ so sánh tốc độ Gobench với một vài chương trình benchmark
+HTTP khác.
 
 Khi kiểm tra sức tải của hệ thống (load testing), chúng ta cần qua tâm đến vấn
 đề về hiệu suất của chương trình benchmark. Khi chương trình benchmark không đủ
@@ -228,7 +229,7 @@ công suất để đáp ứng bài toán mà khách hàng đưa ra, các kết 
 sẽ không còn đáng tin cậy. Chẳng hạn như số lượng các gói tin được xử lý trong
 một giây hoặc độ trễ của gói tin. Điều này khiến cho bạn tin rằng, hệ thống của
 mình đang chạy một cách ì ạch và rồi bạn đưa ra một bản thảo dài dằng dặc các
-tính năng cần được cải thiện, nâng cấp và có thể phải đập đi xây lại từ đầu.
+tính năng cần được cải thiện, nâng cấp, và có thể phải đập đi xây lại từ đầu.
 Thật lãng phí khi tất cả những gì bạn cần làm là đảm bảo chương trình benchmark
 đáp ứng đủ công suất. Đây là lý do tại sao bạn cần biết đến hiệu suất của các
 chương trình benchmark, nắm được điểm mạnh và điểm yếu của mỗi chương trình để
@@ -237,19 +238,42 @@ có được sự lựa chọn phù hợp.
 Cách thực hiện kiểm tra hiệu suất của một chương trình benchmark là kiểm tra
 chúng với một dịch vụ có hiệu suất cao, ví dụ với HTTP là máy chủ Nginx. Chúng
 tôi sử dụng hai máy c5.4xlarge (16 core CPU, 32 GB RAM) trên AWS để tiến hành so
-sánh. Trong tất cả các trường hợp, chúng tôi kiểm tra để đảm bảo Nginx không sử
-dụng hết tất cả CPU, và network in/out không vượt quá băng thông cung cấp
-(10Gbps).
+sánh. Trong tất cả các trường hợp, máy chạy Nginx được kiểm tra để đảm báo nó
+không sử dụng hết tất cả CPU, và network in/out không vượt quá băng thông cung
+cấp (10Gbps).
 
 Trong các chương trình benchmark HTTP phổ biến, chúng tôi chọn k6 (v0.29.0), hey
-(v0.1.4), Artillery (v1.6.1), Jmeter (v5.2.1) để so sánh với Gobench.
+(v0.1.4), Artillery (v1.6.1), Jmeter (v5.2.1) để so sánh với Gobench. Với một
+chương lần chạy chúng tôi thu thập các thông số CPU, RAM, số request trong một
+giây (rps). Kết quả được trình bày ở Bảng 1 bên dưới. Kịch bản test là mỗi
+client GET trang chính của Nginx với `vu` = 30 trong quãng thời gian 120 giây.
 
-Sau đây là kết quả so sánh giữa các chương trình benchmark mà chúng tôi đã chọn.
+| Chương trình | CPU (%) | RAM (MB) | RPS   |
+|--------------|---------|----------|-------|
+| hey          | 217.55 | 150       | 27220 |
+| k6           | 342    | 556.3     | 26314 |
+| Jmeter       | 199    | 814.6     | 26259 |
+| Gobench      | 281    | 114.5     | 25686 |
+| Artillery    | 107    | 145.3     | 1197  |
 
-1. Khả năng gởi gói tin trong một giây
-2. Memory trên từng lượng khách hàng nhất định 
+Bảng 1: So sánh hiệu năng của một số chương trình benchmark HTTP phổ biến.
 
+hey là chương trình chạy nhanh nhất trong cuộc thi. hey tạo nên 27,200 rps, tiếp
+sau đó là k6, Jmeter và Gobench. Nhưng chương trình này tận dụng được thư viện
+network tốt (Go, Java) và tận dụng nhiều nhân của host. Đứng cuối danh sách là
+Artillery khi chỉ tạo nên khoảng 1197 rps; điều này cũng dễ hiểu vì Artillery
+được viết bằng Nodejs và chỉ sử dung 1 nhân của host.
 
+Về RAM sử dụng Gobench, Artillery, hey thật sự nhẹ nhàng khi so sánh với Jmeter
+(JVM ưa sử dụng nhiều bộ nhớ) và k6 (mỗi `vu` là một Javascript virtual
+machine). Bạn có thể tự hỏi 814 MB RAM là như thế nào? Một server thông thường
+vào thời điểm này có vài GB. Vấn đề là RAM sẽ tăng lên khi bạn scale up chương
+trình test: (1) chương trình test kéo dài sẽ thu nhập nhiều metric hơn, và (2)
+số lượng `vu` tăng lên đồng thời với RAM + CPU (thread).
+
+Về tổng thể Artillery kém nhất trong nhóm. Gobench có tốc độ chậm hơn một chút
+so với hey, k6, Jmeter, nhưng bù lại dùng ít RAM hơn. Điều này rất có ích khi
+bạn cầng nâng số lượng `vu` lên vài ngàn hoặc vài chục ngàn.
 
 ## 4. Kết luận
 
@@ -267,27 +291,19 @@ community tuy vậy chỉ cho phép chạy trên một node. Cả MZBench và Ga
 phép viết kịch bản bằng DSL riêng. Artillery phát triển bởi công ty Shoreditch
 Ops bằng NodeJS; kịch bản có thể viết bằng Javascript, do đó khá dễ nắm bắt,
 giống Golang. Tuy nhiên chỉ với bản premium thì mới chạy phân tán trên nhiều
-node được. Và chính vì sử dụng NodeJS nên chương trình không tận dụng được nhiều
-core của benchmark client.
+node được. Và chính vì sử dụng NodeJS nên chương trình không tận dụng được hết
+tài nguyên của host.
 
-[Một vài kết luận về hiệu năng, sau khi hoàn thành Mục 3]
 
 Cho đến thời điểm viết bài báo này Gobench đã đạt được ba trong bốn mục tiêu ban
 đầu được đặt ra là (1) expressive, (2) hỗ trợ nhiều protocol là HTTP, MQTT,
 NATs, và (3) Kết qủa thời gian thực được hiện lên dashboard.
 
-Chúng tôi đã sử dung Gobench để benchmark một hệ thống IoT khá phức tạp, bao gồm
-cả HTTP và MQTT trong mỗi `vu`. Benchmark client chỉ sử dung 100% CPU, với một
-số thời điểm tăng lên 250% CPU của tổng 800% CPU (8 core) khi số lượng `vu` =
-10000.
-
 Nếu chỉ chạy trong một node thì khả năng benchmark sẽ bị giới hạn, trong thời
-gian sắp tới (tuần, tháng) chúng tôi sẽ xây dựng mục tiêu số (4) là tạo ra
-scalable benchmark có khả năng tạo đến 1 triệu kết nối đồng thời.
-
-Thêm các loại client phổ biến khác như gRPC, websocket, graphQL cũng nằm trong
-danh sách cần phải làm.
+gian sắp tới chúng tôi sẽ xây dựng mục tiêu số (4) là tạo ra scalable benchmark
+có khả năng tạo đến 1 triệu kết nối đồng thời. Việc Thêm các loại client phổ
+biến khác như gRPC, websocket, graphQL cũng nằm trong danh sách cần phải làm.
 
 Nhận thấy một số tính năng thú vị của Gobench so với các chương trình khác trên
 thị trường và vẫn còn nhiều vấn đề  khác cần giải quyết, vì vậy hãy xem đây là
-lời kiêu gọi của chúng tôi đến contributor.
+lời kiêu gọi của chúng tôi đến contributor vậy.
