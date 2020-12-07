@@ -220,26 +220,29 @@ chúng tôi sẽ hỗ trợ một số giao thức phổ biến khác như gRPC,
 
 ## 3. Hiệu năng
 
-So sánh tốc độ của các công cụ benchmark
+Ở mục này chúng tôi sẽ so sánh tốc độ Gobench với một vài chương trình khác.
 
-Việc kiểm tra sức tải của hệ thống (Load testing) thường gặp vấn đề về hiệu suất của chương trình benchmark. Khi chương trình benchmark không đủ công suất để đáp ứng bài toán mà khách hàng đưa ra, các kết quả mà bạn nhận được sẽ không còn đáng tin cậy. Chẳng hạn như số lượng các gói tin được xử lý trong một giây hoặc độ trễ của gói tin. Điều này khiến cho bạn tin rằng, hệ thống của mình đang chạy một cách ì ạch và rồi bạn cầm kết quả này tới đưa cho sếp không quên cầm theo một bản thảo dài dằng dặc các tính năng cần được cải thiện, nâng cấp và có thể phải đập đi xây lại từ đầu. Thật lãng phí khi tất cả những gì bạn cần làm là đảm bảo chương trình benchmark đáp ứng đủ công suất.
-Đây là lý do tại sao bạn cần biết đến hiệu suất của các chương trình benchmark, nắm được điểm mạnh và điểm yếu của mỗi chương trình để có được sự lựa chọn phù hợp.
+Khi kiểm tra sức tải của hệ thống (load testing), chúng ta cần qua tâm đến vấn
+đề về hiệu suất của chương trình benchmark. Khi chương trình benchmark không đủ
+công suất để đáp ứng bài toán mà khách hàng đưa ra, các kết quả mà bạn nhận được
+sẽ không còn đáng tin cậy. Chẳng hạn như số lượng các gói tin được xử lý trong
+một giây hoặc độ trễ của gói tin. Điều này khiến cho bạn tin rằng, hệ thống của
+mình đang chạy một cách ì ạch và rồi bạn đưa ra một bản thảo dài dằng dặc các
+tính năng cần được cải thiện, nâng cấp và có thể phải đập đi xây lại từ đầu.
+Thật lãng phí khi tất cả những gì bạn cần làm là đảm bảo chương trình benchmark
+đáp ứng đủ công suất. Đây là lý do tại sao bạn cần biết đến hiệu suất của các
+chương trình benchmark, nắm được điểm mạnh và điểm yếu của mỗi chương trình để
+có được sự lựa chọn phù hợp.
 
-Kiểm tra hiệu suất của các công cụ benchmark phổ biến
-- Cách tốt nhất để kiểm tra hiệu suất của một chương trình benchmark là kiểm tra chúng với một dịch vụ có hiệu suất cao, ví dụ máy chủ Nginx. 
-- Trong bài kiểm tra này, các yếu tố ngoại vi như độ trễ mang, băng thông mạng sẽ bị bỏ qua. Như vậy, cần cấu hình máy chủ Nginx và chương trình benchmark trong cùng một môi trường mạng. Nếu bạn quan tâm đến băng thông mạng, hãy thử thêm bài kiểm tra sau:
+Cách thực hiện kiểm tra hiệu suất của một chương trình benchmark là kiểm tra
+chúng với một dịch vụ có hiệu suất cao, ví dụ với HTTP là máy chủ Nginx. Chúng
+tôi sử dụng hai máy c5.4xlarge (16 core CPU, 32 GB RAM) trên AWS để tiến hành so
+sánh. Trong tất cả các trường hợp, chúng tôi kiểm tra để đảm bảo Nginx không sử
+dụng hết tất cả CPU, và network in/out không vượt quá băng thông cung cấp
+(10Gbps).
 
-Giả sử mỗi gói tin tới máy chủ Nginx (100Mbit/ giây) yêu cầu 250 bytes để tải, tốc độ tải mỗi gói tin trên một giây trên lý thuyết là 100M /(8*250) = 50.000 (gói tin trên một giây) . Trên thực tế, con số này có thể thấp hơn nhiều, có thể là khoảng 30.000  (gói tin trên một giây). Để kiểm tra giới hạn băng thông, bạn có thể thử bằng cách tăng gấp đôi kích thước của các gói tin, nếu các gói tin được gửi trong một giây giảm một nửa, điều đó có nghĩa là bạn đã bị giới hạn băng thông.
-
-Trong bài kiểm tra này, chúng tôi sử dụng Kubernetes để có thể cấu hình nhiều chương trình benchmark dễ dàng hơn, một máy ảo của Amazon loại c5.r4xlarge. Trên máy ảo này, chúng tôi cài đặt 2 pod với cấu hình như sau:
-
-1. Máy chủ Nginx 
- CPU: 6 nhân logic 
-Memory: 12 gigabytes
-
-2. Chương trình benchmark
- CPU: 6 nhân logic 
- Memory: 12 gigabytes
+Trong các chương trình benchmark HTTP phổ biến, chúng tôi chọn k6 (v0.29.0), hey
+(v0.1.4), Artillery (v1.6.1), Jmeter (v5.2.1) để so sánh với Gobench.
 
 Sau đây là kết quả so sánh giữa các chương trình benchmark mà chúng tôi đã chọn.
 
