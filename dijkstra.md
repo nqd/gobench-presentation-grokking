@@ -252,7 +252,7 @@ client GET trang chính của Nginx với `vu` = 30 trong quãng thời gian 120
 
 | Chương trình | CPU (%) | RAM (MB) | RPS   |
 |--------------|---------|----------|-------|
-| hey          | 217.55 | 150       | 27220 |
+| hey          | 218     | 150       | 27220 |
 | k6           | 342    | 556.3     | 26314 |
 | Jmeter       | 199    | 814.6     | 26259 |
 | Gobench      | 281    | 114.5     | 25686 |
@@ -282,7 +282,7 @@ bạn cầng nâng số lượng `vu` lên vài ngàn hoặc vài chục ngàn.
 MQTT không có nhiều sự lựa chọn như HTTP nên chỉ một đối tượng để so sánh là
 emqtt_bench được viết bằng Erlang. Cũng như HTTP, chúng tôi chọn một broker có
 hiệu năng cao là Vernemq. Chương trình client (Gobench, emqtt_bench) và server
-(Vernemq) chạy trên hai máy c5.4xlarge.
+(Vernemq) chạy trên hai máy c5.4xlarge riêng biệt.
 
 Đặt tính của MQTT là client và broker giữ kết nối thông qua một liên kết TCP,
 việc có thể tạo nhiều kết nối cùng một lúc của chương trình client là hết sức
@@ -290,9 +290,10 @@ quan trọng. Chúng tôi tiến hành đo đạt với ba kịch bản khác nh
 11250 client, và 25000 client. Mỗi kịch bản hai loại hành vi được thu thập dữ
 liệu: tạo kết nối, và publish đến một topic (bench/%i) với tốc độ 1 rps.
 
-Quan sát thấy RAM sử dụng của emqtt_bench tăng liên tục, chúng tôi chỉ lấy dung
-lượng RAM vào thởi điểm khi tất cả các `vu` đã bắt đầu publish. Kết quả ở Bảng 2
-so sánh hiệu năng giữa Gobench và emqtt_bench.
+Quan sát thấy RAM sử dụng của emqtt_bench tăng liên tục trong suốt quá trình
+chạy, chúng tôi chỉ lấy dung lượng RAM và CPU vào thởi điểm khi tất cả các `vu`
+đã bắt đầu publish. Kết quả ở Bảng 2 so sánh hiệu năng giữa Gobench và
+emqtt_bench.
 
 | Chương trình | CPU (%) | RAM (MB) |
 |--------------|---------|----------|
@@ -308,6 +309,15 @@ so sánh hiệu năng giữa Gobench và emqtt_bench.
 | emqtt_bench 250 pub   | 52 | 252 |
 | emqtt_bench 11250 pub | 297| 995 |
 | emqtt_bench 25000 pub | 850 | 2847 |
+
+Bảng 2: So sánh giữa Gobench và emqtt_bench với 250, 11250, và 25000 `vu` trong
+hai trường hợp (1) chỉ tạo kết nối và (2) mỗi `vu` publish với tốc độ 1 rps.
+
+Cả Gobench và emqtt_bench đều rất hiệu quả trong việc tạo ra nhiều kết nối đồng
+thời, chỉ tốn 1024 MiB và 1485 MiB tương ứng cho 25000 kết nối, nhờ vào
+greenthread của Golang và Erlang. Chúng ta có thể thấy eqmtt_bench khá hiệu quả
+với số lượng `vu` nhỏ, nhưng khi tăng tăng dần lên Gobench vượt trộ về phương
+diện sử dụng CPU và RAM.
 
 ## 4. Kết luận
 
