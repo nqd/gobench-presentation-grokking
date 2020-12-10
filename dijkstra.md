@@ -235,6 +235,8 @@ Thật lãng phí khi tất cả những gì bạn cần làm là đảm bảo c
 chương trình benchmark, nắm được điểm mạnh và điểm yếu của mỗi chương trình để
 có được sự lựa chọn phù hợp.
 
+### 3.1. Benchmark HTTP
+
 Cách thực hiện kiểm tra hiệu suất của một chương trình benchmark là kiểm tra
 chúng với một dịch vụ có hiệu suất cao, ví dụ với HTTP là máy chủ Nginx. Chúng
 tôi sử dụng hai máy c5.4xlarge (16 core CPU, 32 GB RAM) trên AWS để tiến hành so
@@ -274,6 +276,38 @@ số lượng `vu` tăng lên đồng thời với RAM + CPU (thread).
 Về tổng thể Artillery kém nhất trong nhóm. Gobench có tốc độ chậm hơn một chút
 so với hey, k6, Jmeter, nhưng bù lại dùng ít RAM hơn. Điều này rất có ích khi
 bạn cầng nâng số lượng `vu` lên vài ngàn hoặc vài chục ngàn.
+
+### 3.2. Benchmark MQTT
+
+MQTT không có nhiều sự lựa chọn như HTTP nên chỉ một đối tượng để so sánh là
+emqtt_bench được viết bằng Erlang. Cũng như HTTP, chúng tôi chọn một broker có
+hiệu năng cao là Vernemq. Chương trình client (Gobench, emqtt_bench) và server
+(Vernemq) chạy trên hai máy c5.4xlarge.
+
+Đặt tính của MQTT là client và broker giữ kết nối thông qua một liên kết TCP,
+việc có thể tạo nhiều kết nối cùng một lúc của chương trình client là hết sức
+quan trọng. Chúng tôi tiến hành đo đạt với ba kịch bản khác nhau: 250 client,
+11250 client, và 25000 client. Mỗi kịch bản hai loại hành vi được thu thập dữ
+liệu: tạo kết nối, và publish đến một topic (bench/%i) với tốc độ 1 rps.
+
+Quan sát thấy RAM sử dụng của emqtt_bench tăng liên tục, chúng tôi chỉ lấy dung
+lượng RAM vào thởi điểm khi tất cả các `vu` đã bắt đầu publish. Kết quả ở Bảng 2
+so sánh hiệu năng giữa Gobench và emqtt_bench.
+
+| Chương trình | CPU (%) | RAM (MB) |
+|--------------|---------|----------|
+| Gobench 250 conn      | 12 | 225 |
+| Gobench 11250 conn    | 31 | 536.5 |
+| Gobench 25000 conn    | 52 | 1024 |
+| emqtt_bench 250 conn   | 12 | 147 |
+| emqtt_bench 11250 conn | 37| 643 |
+| emqtt_bench 25000 conn | 49 | 1485 |
+| Gobench 250 pub       | 85    | 267.3 |
+| Gobench 11250 pub     | 286   | 741.9 |
+| Gobench 25000 pub     | 669   | 1450.0 |
+| emqtt_bench 250 pub   | 52 | 252 |
+| emqtt_bench 11250 pub | 297| 995 |
+| emqtt_bench 25000 pub | 850 | 2847 |
 
 ## 4. Kết luận
 
